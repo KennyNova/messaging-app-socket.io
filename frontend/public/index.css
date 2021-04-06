@@ -1,0 +1,78 @@
+#container {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.chat-input {
+    width: 300px;
+    height: 35px;
+    border: solid 1px #444;
+}
+
+.chat-submit {
+    width: 50px;
+    height: 35px;
+    border: solid 1px #444;
+}
+
+.user-submit {
+    width: 50px;
+    height: 35px;
+    border: solid 1px #444;
+}
+
+.user-disconnect {
+    width: auto;
+    height: 35px;
+    border: solid 1px #444;
+}
+
+.chat-window {
+    height: 300px;
+    width: 400px;
+    overflow: auto;
+}
+
+#chatSection {
+    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.userSection {
+    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.user-list {
+    height: auto;
+    width: 200px;
+    overflow: auto;
+}
+
+.time {
+    color: blue;
+}
+
+.render-message {
+    display: inline-block;
+}
+
+.channels {
+    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    overflow: auto;
+}
+
+.chat-room {
+    width: auto;
+    height: 35px;
+    border: solid 1px #444;
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat app</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="container">
+        <h1>
+            Nodejs + Socket Chat app
+        </h1>
+        <div id="chatSection">
+            <form class="user-form">
+                Username:
+                <input type="text" class="user-input" />
+                <input type="submit" class="user-submit" value="enter" name="username" />
+                <input type="button" class="user-disconnect" value="disconnect">
+            </form>
+        </div>
+        <div class="channels">
+            <!-- <input type="button" class="chat-room" value="General" name="General">
+            <input type="button" class="chat-room" value="Math" name="Math">
+            <input type="button" class="chat-room" value="Science" name="Science">
+            <input type="button" class="chat-room" value="History" name="History">
+            <input type="button" class="chat-room" value="Literature" name="Literature"> -->
+            <button type="button" class="chat-room" value="General" name="General">General</button>
+            <button type="button" class="chat-room" value="Math" name="Math">Math</button>
+            <button type="button" class="chat-room" value="Science" name="Science">Science</button>
+            <button type="button" class="chat-room" value="History" name="History">History</button>
+            <button type="button" class="chat-room" value="Literature" name="Literature">Literature</button>
+        </div>
+        <div id="chatSection">
+            <div class="chat-window"></div>
+            <form class="chat-form">
+                <label class="chat-label">
+            Enter a message:
+            <input type="text" class="chat-input" />
+          </label>
+                <input type="submit" class="chat-submit" value="enter" name="chat" />
+            </form>
+        </div>
+    </div>
+    <div class="userSection">
+        <div class="user-list">
+
+        </div>
+    </div>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
