@@ -17,14 +17,16 @@
 
 .user-submit {
     width: 50px;
-    height: 35px;
+    height: 25px;
     border: solid 1px #444;
+    border-radius: 5px;
 }
 
 .user-disconnect {
     width: auto;
-    height: 35px;
+    height: 25px;
     border: solid 1px #444;
+    border-radius: 5px;
 }
 
 .chat-window {
@@ -69,10 +71,41 @@
     height: auto;
     width: auto;
     overflow: auto;
+    text-align: center;
 }
 
 .chat-room {
     width: auto;
     height: 35px;
     border: solid 1px #444;
+}
+
+.login-page {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    right: 30%;
+}
+
+.login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons{
+    text-align: center;
+}
+
+#join{
+
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    overflow: auto;
+    text-align: center;
+    align-content: center;
 }
