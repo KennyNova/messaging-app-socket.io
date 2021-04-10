@@ -15,7 +15,6 @@ const users = {
     history: [],
     literature: []
 }
-console.log(users[roomNameVar].indexOf("hi") + "thfidnsjl")
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 app.get('/general', (req, res) => {
@@ -42,8 +41,6 @@ io.on('connection', socket => {
 
     socket.on('clientIndexFirstLogin', (client, roomName) => {
         var roomNameVar = roomName.toLowerCase();
-        console.log(roomNameVar)
-        console.log(users[roomNameVar])
         if (!users[roomNameVar].includes(client)) {
             users[roomNameVar].push(client)
             let array = users[roomNameVar]
@@ -59,7 +56,6 @@ io.on('connection', socket => {
         if (!users[roomNameVar].includes(client)) {
             console.log("user", client, "connected to room", roomName)
             users.lobby.push(client)
-            console.log(users)
             io.emit('clientScript', client, roomName)
         } else
             io.emit('allowLogin')
@@ -67,10 +63,7 @@ io.on('connection', socket => {
 
     socket.on('chat', (message, user, roomName) => {
         roomNameVar = roomName
-        //if (users[roomNameVar].includes(user)) {
-            console.log("message sent: ", message, "from", user, "MESSAGE LOG", roomName)
             io.emit('chat', message, user, roomNameVar)
-        //}
     })
 
     socket.on('chatDisconnect', (message, user) => {
@@ -80,13 +73,11 @@ io.on('connection', socket => {
 
     socket.on('end', (user, roomName) => {
         roomNameVar = roomName
-        console.log(users[roomNameVar] + "HIHIHIHIHI")
-        console.log(user)
         if (users[roomNameVar].includes(user)) {
             users[roomNameVar].splice(users[roomNameVar].indexOf(user), 1);
-            console.log(users)
             io.emit('disconnectMessage', user, roomNameVar)
             io.emit('clear', user)
+
             // for (let i = 0; i < users[roomNameVar].length; i++) {
             //     io.emit('userListUpdate', users[i])
             // }
@@ -94,16 +85,10 @@ io.on('connection', socket => {
     });
 
     socket.on('changeRoom', (roomName, user) => {
-        console.log("THIS IS ROOM NAME" + roomName)
-
-        console.log(users.general[users.general.indexOf(user)] + "consnsnsnsnsnns")
-        console.log(users[roomNameVar][users[roomNameVar].indexOf(user)] + "consnsnsnsnsnns")
-
         let index = users[roomNameVar].indexOf(user)
         users[roomName].push(user)
         users[roomNameVar].splice(index, 1)
         roomNameVar = roomName
-        console.log(users + "AFTER SWITCH")
         socket.emit('clientScript', user)
 
     })

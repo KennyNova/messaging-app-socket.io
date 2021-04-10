@@ -25,8 +25,8 @@ var users = {
     literature: []
 }
 var chatRoomList = ["General", "Math", "Science", "History", "Literature"]
-var isTrue = false
 var runOnce = 1
+var canChat = true
 
 var time = new Date();
 let timeString = ''
@@ -34,7 +34,7 @@ let timeString = ''
 function renderRoomButtons() {
     const div = document.createElement('div')
     div.classList.add("channels")
-    //const button = document.createElement('button')
+        //const button = document.createElement('button')
     chatRoomList.forEach(element => {
         var button = document.createElement('button')
         button.innerHTML = element
@@ -71,131 +71,128 @@ function currentTime() {
 }
 
 
-function renderMessage(message, user, roomName){
-    if(roomNameClass.innerHTML == roomName){
-    const div = document.createElement('div')
-    div.classList.add('render-message')
-    div.innerText = user + " : " + message
-    chatWindow.appendChild(div)
+function renderMessage(message, user, roomName) {
+    if (roomNameClass.innerHTML == roomName) {
+        const div = document.createElement('div')
+        div.classList.add('render-message')
+        div.innerText = user + " : " + message
+        chatWindow.appendChild(div)
 
-    currentTime()
-    const timeDiv = document.createElement('div')
-    timeDiv.classList.add('time')
-    timeDiv.innerText = timeString
-    chatWindow.appendChild(timeDiv)
-    console.log("this ran")
+        currentTime()
+        const timeDiv = document.createElement('div')
+        timeDiv.classList.add('time')
+        timeDiv.innerText = timeString
+        chatWindow.appendChild(timeDiv)
     }
 }
 
-function getUsers(){
+function getUsers() {
     socket.emit('getUsers')
     return users
 }
 
-function updateUsers(userList){
+function updateUsers(userList) {
     users = userList
 }
 
-function renderConnected(user, roomName, boolean){
-    if(roomNameClass.innerHTML == roomName){
-    chatRoom = roomName
-    getUsers()
-    let array = users[chatRoom]
-    let index = array.length - 1
-    if(boolean){
-    const div = document.createElement('div')
-    div.classList.add('render-message')
-    div.innerText = "System: " + users[chatRoom][index] + " has connected to chat " + chatRoom
-    chatWindow.appendChild(div)
+function renderConnected(user, roomName, boolean) {
+    if (roomNameClass.innerHTML == roomName) {
+        chatRoom = roomName
+        getUsers()
+        let array = users[chatRoom]
+        let index = array.length - 1
+        if (boolean) {
+            const div = document.createElement('div')
+            div.classList.add('render-message')
+            div.innerText = "System: " + users[chatRoom][index] + " has connected to chat " + chatRoom
+            chatWindow.appendChild(div)
 
-    currentTime()
-    const timeDiv = document.createElement('div')
-    timeDiv.classList.add('time')
-    timeDiv.innerText = timeString
-    chatWindow.appendChild(timeDiv)
+            currentTime()
+            const timeDiv = document.createElement('div')
+            timeDiv.classList.add('time')
+            timeDiv.innerText = timeString
+            chatWindow.appendChild(timeDiv)
+        }
+        userList.innerHTML = ''
+        users[chatRoom].forEach(element => {
+            let userListDiv = document.createElement('div')
+            userListDiv.classList.add('users')
+            userListDiv.innerText = element
+            userList.appendChild(userListDiv)
+        })
     }
-    userList.innerHTML = ''
-    users[chatRoom].forEach(element => {
-        let userListDiv = document.createElement('div')
-        userListDiv.classList.add('users')
-        userListDiv.innerText = element
-        userList.appendChild(userListDiv)
+}
+
+if (clientIndex) {
+    clientIndex.addEventListener('submit', event => {
+        event.preventDefault();
+        if (allowLogin != 1) {
+            if (InputUser.value) {
+                localUser = InputUser.value
+                    //InputUser.value = ''
+                allowLogin++
+                renderRoomButtons()
+                canChat = true
+            }
+        }
     })
-    }
 }
 
-if(clientIndex){
-clientIndex.addEventListener('submit', event => {
-    event.preventDefault();
-    if (allowLogin != 1) {
-        if (InputUser.value) {
-            localUser = InputUser.value
-            //InputUser.value = ''
-            allowLogin++
-            renderRoomButtons()
+if (client) {
+    client.addEventListener('submit', event => {
+        event.preventDefault();
+        if (allowLogin != 1) {
+            if (InputUser.value) {
+                localUser = InputUser.value
+                    //socket.emit('updateUsersToIndex')
+                socket.emit('clientIndex', InputUser.value, chatRoom)
+                InputUser.value = ''
+                allowLogin++
+            }
         }
-    }
-})
+    })
 }
 
-if(client){
-client.addEventListener('submit', event => {
-    event.preventDefault();
-    if (allowLogin != 1) {
-        if (InputUser.value) {
-            localUser = InputUser.value
-            //socket.emit('updateUsersToIndex')
-            socket.emit('clientIndex', InputUser.value, chatRoom)
-            InputUser.value = ''
-            allowLogin++
+if (userDisconnect) {
+    userDisconnect.addEventListener('click', event => {
+        event.preventDefault();
+        allowLogin--
+        socket.emit('end', localUser, roomNameClass.innerHTML);
+    })
+}
+
+if (chat) {
+    chat.addEventListener('submit', event => {
+        event.preventDefault();
+        console.log(users)
+        if (Input.value && localUser == users[roomNameClass.innerHTML].includes(localUser)) {
+            socket.emit('chat', Input.value, localUser, roomNameClass.innerHTML)
+            Input.value = ''
         }
-    }
-})
+    })
 }
 
-if(userDisconnect){
-userDisconnect.addEventListener('click', event => {
-    event.preventDefault();
-    allowLogin--
-    console.log(localUser)
-    socket.emit('end', localUser, roomNameClass.innerHTML);
-})
+if (buttons) {
+    buttons.addEventListener('click', event => {
+        chatRoom = event.target.value
+        chatRoom = chatRoom.toLocaleLowerCase();
+        renderJoinButton(chatRoom)
+        socket.emit('clientIndexFirstLogin', localUser, chatRoom)
+    })
 }
 
-if(chat){
-chat.addEventListener('submit', event => {
-    event.preventDefault();
-    console.log(localUser)
-    if (Input.value && localUser) {
-        socket.emit('chat', Input.value, localUser, roomNameClass.innerHTML)
-        console.log(Input.value)
-        Input.value = ''
-        console.log(localUser)
-    }
-})
+if (channel) {
+    channel.addEventListener('click', event => {
+        chatRoom = event.target.value
+        socket.emit('changeRoom', chatRoom, localUser)
+    })
 }
 
-if(buttons){
-buttons.addEventListener('click', event => {
-    chatRoom = event.target.value
-    chatRoom = chatRoom.toLocaleLowerCase();
-    renderJoinButton(chatRoom)
-    socket.emit('clientIndexFirstLogin', localUser, chatRoom)
-})
-}
-
-if(channel){
-channel.addEventListener('click', event => {
-    chatRoom = event.target.value
-    socket.emit('changeRoom', chatRoom, localUser)
-})
-}
-    
 window.addEventListener('load', (event) => {
-    if(chat){
-    chatRoom = roomNameClass.innerHTML.toLowerCase();
-    socket.emit('updateUsersToIndex', true)
-    socket.emit('roomChanged')
+    if (chat) {
+        chatRoom = roomNameClass.innerHTML.toLowerCase();
+        socket.emit('updateUsersToIndex', true)
+        socket.emit('roomChanged')
     }
 });
 
@@ -211,50 +208,55 @@ socket.on('allowLogin', function() {
 socket.on('userListUpdate', users => {
     socket.emit('updateUsersToIndex', false)
     let listOfUsers = users
-    //renderConnected(listOfUsers[chatRoom], chatRoom)
+        //renderConnected(listOfUsers[chatRoom], chatRoom)
 })
+
 
 socket.on('chat', (message, user, roomName) => {
     renderMessage(message, user, roomName)
 })
 
+
 socket.on('clear', user => {
     //while (userList.firstChild) {
-        userList.removeChild(userList.firstChild);
-        
-   // }
+    userList.removeChild(userList.firstChild);
+    socket.emit('updateUsersToIndex', false)
+    socket.emit('roomChanged')
+    canChat = false
+
+    // }
 })
 
 socket.on('disconnectMessage', (user, roomName) => {
-    if(roomNameClass.innerHTML == roomName){
-    const disconnectedDiv = document.createElement('div')
-    disconnectedDiv.classList.add('render-message')
-    disconnectedDiv.innerText = "System: " + user + " has disconnected from " + roomNameClass.innerHTML
-    chatWindow.appendChild(disconnectedDiv)
-    currentTime()
-    const timeDiv = document.createElement('div')
-    timeDiv.classList.add('time')
-    timeDiv.innerText = timeString
-    chatWindow.appendChild(timeDiv)
+    if (roomNameClass.innerHTML == roomName) {
+        const disconnectedDiv = document.createElement('div')
+        disconnectedDiv.classList.add('render-message')
+        disconnectedDiv.innerText = "System: " + user + " has disconnected from " + roomNameClass.innerHTML
+        chatWindow.appendChild(disconnectedDiv)
+        currentTime()
+        const timeDiv = document.createElement('div')
+        timeDiv.classList.add('time')
+        timeDiv.innerText = timeString
+        chatWindow.appendChild(timeDiv)
     }
     renderConnected("user", roomNameClass.innerHTML, false)
 })
 
 socket.on('updateUsersToScript', (userList, fromFunction) => {
     users = userList
-    if(fromFunction){
-    renderConnected(users[chatRoom], chatRoom, true)
+    if (fromFunction) {
+        renderConnected(users[chatRoom], chatRoom, true)
+    } else {
+        renderConnected(users[chatRoom], chatRoom, false)
     }
 })
 
 socket.on('runFunctionToGetUsers', (users) => {
-    if(runOnce){
-    let array = users[chatRoom]
-    let index = array.length - 1
-    console.log(users)
-    localUser = users[chatRoom][index]
-    console.log(localUser)
-    runOnce--
+    if (runOnce) {
+        let array = users[chatRoom]
+        let index = array.length - 1
+        localUser = users[chatRoom][index]
+        runOnce--
     }
     updateUsers(users)
 })
