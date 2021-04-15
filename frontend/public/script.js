@@ -18,7 +18,7 @@ var localUser = ''
 var allowLogin = 0
 var users = {
     lobby: [],
-    general: ["hi"],
+    general: [],
     math: [],
     science: [],
     history: [],
@@ -83,7 +83,13 @@ function renderMessage(message, user, roomName) {
         timeDiv.classList.add('time')
         timeDiv.innerText = timeString
         chatWindow.appendChild(timeDiv)
+
+        socket.emit('messageToDatabase', message, user, roomName, timeString)
     }
+}
+
+function renderMessageFromDatabase() {
+    1 + 1
 }
 
 function getUsers() {
@@ -193,12 +199,13 @@ window.addEventListener('load', (event) => {
         chatRoom = roomNameClass.innerHTML.toLowerCase();
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged')
+        socket.emit('getMessagesFromDB', chatRoom)
     }
 });
 
 socket.on('clientScript', (client, roomName) => {
     users[roomName].push(client)
-    renderConnected(client, roomName, true)
+        //renderConnected(client, roomName, true)
 })
 
 socket.on('allowLogin', function() {
@@ -216,6 +223,10 @@ socket.on('chat', (message, user, roomName) => {
     renderMessage(message, user, roomName)
 })
 
+socket.on('renderMessagesFromDB', () => {
+
+
+})
 
 socket.on('clear', user => {
     //while (userList.firstChild) {
