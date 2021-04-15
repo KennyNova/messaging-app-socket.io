@@ -17,7 +17,7 @@ const getUsers = (request, response) => {
 }
 
 const getUsersFromRoomName = (request, response) => {
-    const roomname = parseInt(request.params.roomname)
+    const roomname = request.params.roomname
 
     pool.query('SELECT users FROM socketchat WHERE roomname = $1', [roomname], (error, results) => {
         if (error) {
@@ -37,9 +37,9 @@ const getRoomNames = (request, response) => {
 }
 
 const getMessagesFromRoomName = (request, response) => {
-    const roomname = parseInt(request.params.roomname)
+    const roomname = request.params.roomname
 
-    pool.query('SELECT messages FROM socketchat WHERE roomname = $1', (error, results) => {
+    pool.query('SELECT messages FROM socketchat WHERE roomname = $1', [roomname], (error, results) => {
         if (error) {
             throw error
         }
@@ -59,7 +59,7 @@ const createRoom = (request, response) => {
 }
 
 const updateUsersAtRoomName = (request, response) => {
-    const roomname = parseInt(request.params.roomname)
+    const roomname = request.params.roomname
     const { users } = request.body
 
     pool.query(
@@ -74,6 +74,34 @@ const updateUsersAtRoomName = (request, response) => {
     )
 }
 
+const updateMessagesAtRoomName = (request, response) => {
+    const roomname = request.params.roomname
+    const { messages } = request.body
+
+    pool.query(
+        'UPDATE socketchat SET messages = $1 WHERE roomname = $2', [messages, roomname],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            //response.status(200).send(`User modified with ID: ${id}`)
+            response.status(200).send(request.body)
+        }
+    )
+}
+
+const deleteRoomName = (request, response) => {
+    const roomname = request.params.roomname
+    console.log(roomname)
+    pool.query('DELETE FROM socketchat WHERE roomname = $1', [roomname], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(request.body)
+            //response.status(200).send(`User deleted with ID: ${id}`)
+    })
+}
+
 module.exports = {
     getUsers,
     getUsersFromRoomName,
@@ -81,4 +109,6 @@ module.exports = {
     getMessagesFromRoomName,
     createRoom,
     updateUsersAtRoomName,
+    updateMessagesAtRoomName,
+    deleteRoomName,
 }

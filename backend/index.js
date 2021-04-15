@@ -5,11 +5,26 @@ const port = process.env.PORT || 3000
 const io = require('socket.io')(server)
 const path = require('path')
 const db = require('./queries')
+const Pool = require('pg').Pool
+const pool = new Pool({
+    user: 'me',
+    host: 'localhost',
+    database: 'chat',
+    password: 'password',
+    port: 5432,
+})
 
 
 var roomNameVar = 'general'
 const users = {
     lobby: [],
+    general: [],
+    math: [],
+    science: [],
+    history: [],
+    literature: []
+}
+const messages = {
     general: [],
     math: [],
     science: [],
@@ -60,6 +75,10 @@ app.post('/roomname', db.createRoom)
 
 app.put('/users/:roomname', db.updateUsersAtRoomName)
 
+app.put('/messages/:roomname', db.updateMessagesAtRoomName)
+
+app.delete('/:roomname', db.deleteRoomName)
+
 
 io.on('connection', socket => {
 
@@ -71,6 +90,24 @@ io.on('connection', socket => {
             let index = array.length - 1
             console.log(users[roomNameVar][index])
             io.emit('clientScript', users[roomNameVar][index], roomName)
+
+            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomNameVar], roomNameVar],
+                (error, results) => {
+                    if (error) {
+                        throw error
+                    }
+                    //response.status(200).send(`User modified with ID: ${id}`)
+
+                }
+            )
+            pool.query('SELECT users FROM socketchat', (error, results) => {
+                if (error) {
+                    throw error
+                }
+                console.log(JSON.stringify(results.rows))
+            })
+
+
         } else
             io.emit('allowLogin')
     })
@@ -90,6 +127,41 @@ io.on('connection', socket => {
         io.emit('chat', message, user, roomNameVar)
     })
 
+    socket.on('messageToDatabase', (message, user, roomName, time) => {
+        roomname = roomName
+        messageData = {
+            "message": message,
+            "user": user,
+            "time": time
+        }
+        messages[roomname].push(messageData)
+        console.log(messages[roomname] + " SSSS127")
+
+        pool.query(
+            'UPDATE socketchat SET messages = $1 WHERE roomname = $2', [messages, roomname],
+            (error, results) => {
+                if (error) {
+                    throw error
+                }
+                //response.status(200).send(`User modified with ID: ${id}`)
+                // response.status(200).send(request.body)
+            }
+        )
+    })
+
+    socket.on('getMessagesFromDB', (roomName) => {
+        roomname = roomName
+
+        pool.query('SELECT messages FROM socketchat WHERE roomname = $1', [roomname], (error, results) => {
+            if (error) {
+                throw error
+            }
+            //response.status(200).json(results.rows)
+            socket.emit('renderMessagesFromDB', results.row)
+            console.log(results.row + "321321")
+        })
+    })
+
     socket.on('chatDisconnect', (message, user) => {
         console.log("disconnected:::", user)
         io.emit('chat', message, user)
@@ -101,10 +173,12 @@ io.on('connection', socket => {
             users[roomNameVar].splice(users[roomNameVar].indexOf(user), 1);
             io.emit('disconnectMessage', user, roomNameVar)
             io.emit('clear', user)
-
-            // for (let i = 0; i < users[roomNameVar].length; i++) {
-            //     io.emit('userListUpdate', users[i])
-            // }
+            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomNameVar], roomNameVar],
+                (error, results) => {
+                    if (error) {
+                        throw error
+                    }
+                })
         }
     });
 
@@ -115,6 +189,25 @@ io.on('connection', socket => {
         roomNameVar = roomName
         socket.emit('clientScript', user)
 
+        pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomNameVar], roomNameVar],
+            (error, results) => {
+                if (error) {
+                    throw error
+                }
+                //response.status(200).send(`User modified with ID: ${id}`)
+
+            }
+        )
+        pool.query('SELECT messages FROM socketchat WHERE roomname = $1', [roomNameVar], (error, results) => {
+            if (error) {
+                throw error
+            }
+            messages[roomNameVar] = results.row
+            console.log(results.row + "THIS IS RESULTS")
+            console.log(JSON.stringify(results.row))
+        })
+        console.log(messages[roomNameVar].user + "hihihi")
+            //socket.emit('renderMessagesFromDatabase', )
     })
 
     socket.on('roomChanged', function() {
