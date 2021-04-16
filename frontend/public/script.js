@@ -170,8 +170,9 @@ if (userDisconnect) {
 if (chat) {
     chat.addEventListener('submit', event => {
         event.preventDefault();
-        console.log(users)
-        if (Input.value && localUser == users[roomNameClass.innerHTML].includes(localUser)) {
+        let msg = Input.value
+
+        if (msg && users[roomNameClass.innerHTML].includes(localUser)) {
             socket.emit('chat', Input.value, localUser, roomNameClass.innerHTML)
             Input.value = ''
         }

@@ -75,6 +75,8 @@ app.post('/roomname', db.createRoom)
 
 app.put('/users/:roomname', db.updateUsersAtRoomName)
 
+app.put('/cleardatabase', db.clearDatabase)
+
 app.put('/messages/:roomname', db.updateMessagesAtRoomName)
 
 app.delete('/:roomname', db.deleteRoomName)
@@ -134,8 +136,11 @@ io.on('connection', socket => {
             "user": user,
             "time": time
         }
-        messages[roomname].push(messageData)
-        console.log(messages[roomname] + " SSSS127")
+        console.log(JSON.stringify(messageData) + "137")
+        if (messageData) {
+            console.log(JSON.stringify(messages) + " SSSS139")
+            messages[roomname].push(messageData)
+        }
 
         pool.query(
             'UPDATE socketchat SET messages = $1 WHERE roomname = $2', [messages, roomname],
@@ -184,29 +189,28 @@ io.on('connection', socket => {
 
     socket.on('changeRoom', (roomName, user) => {
         let index = users[roomNameVar].indexOf(user)
+            //console.log(users[roomName] + "188")
         users[roomName].push(user)
         users[roomNameVar].splice(index, 1)
         roomNameVar = roomName
         socket.emit('clientScript', user)
-
+        console.log(JSON.stringify(messages) + " SSSS195")
         pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomNameVar], roomNameVar],
             (error, results) => {
                 if (error) {
                     throw error
                 }
                 //response.status(200).send(`User modified with ID: ${id}`)
-
             }
         )
         pool.query('SELECT messages FROM socketchat WHERE roomname = $1', [roomNameVar], (error, results) => {
             if (error) {
                 throw error
             }
-            messages[roomNameVar] = results.row
-            console.log(results.row + "THIS IS RESULTS")
-            console.log(JSON.stringify(results.row))
+            messages[roomNameVar] = results.rows
+            console.log(JSON.stringify(results.rows) + "211")
         })
-        console.log(messages[roomNameVar].user + "hihihi")
+        console.log(JSON.stringify(messages[roomNameVar]) + "hihihi")
             //socket.emit('renderMessagesFromDatabase', )
     })
 

@@ -102,6 +102,26 @@ const deleteRoomName = (request, response) => {
     })
 }
 
+const clearDatabase = (request, response) => {
+    const users = {}
+    const messages = {}
+    const roomname = ["general", "math", "history", "science", "literature"]
+
+    for (let i = 0; i != 5; i++) {
+        pool.query(
+            'UPDATE socketchat SET users = $1, messages = $2 WHERE roomname = $3', [users, messages, roomname[i]],
+            (error, results) => {
+                if (error) {
+                    throw error
+                }
+                //response.status(200).send(`User modified with ID: ${id}`)
+                //response.status(200).send(request.body)
+            }
+        )
+    }
+    response.status(200).send(request.body)
+}
+
 module.exports = {
     getUsers,
     getUsersFromRoomName,
@@ -111,4 +131,5 @@ module.exports = {
     updateUsersAtRoomName,
     updateMessagesAtRoomName,
     deleteRoomName,
+    clearDatabase,
 }
