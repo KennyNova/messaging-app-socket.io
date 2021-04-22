@@ -13,15 +13,17 @@ body {
     height: 35px;
     border: solid 1px #555;
     background-color: #444;
+    border-radius: 5px;
 }
 
 .chat-submit {
     width: 50px;
     height: 35px;
     border: solid 1px #444;
+    border-radius: 5px;
 }
 
-.user-submit {
+.submit {
     width: 50px;
     height: 25px;
     border: solid 1px #444;
@@ -34,9 +36,20 @@ body {
 
 .user-disconnect {
     width: auto;
-    height: 25px;
+    height: 35px;
     border: solid 1px #444;
     border-radius: 5px;
+}
+
+.disconnect {
+    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    height: 35px;
+    width: auto;
+    overflow: auto;
+    text-align: center;
 }
 
 .chat-window {
@@ -48,7 +61,14 @@ body {
     overflow-wrap: break-word;
 }
 
-#chatSection {
+.user-submit {
+    width: 50px;
+    height: 25px;
+    border: solid 1px #444;
+    border-radius: 5px;
+}
+
+#login-form {
     float: left;
     border: 1px grey solid;
     border-radius: 10px;
@@ -57,11 +77,23 @@ body {
     overflow-x: hidden;
 }
 
+#chatSection {
+    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    overflow: auto;
+    overflow-x: hidden;
+    border-top-right-radius: 0px;
+}
+
 .userSection {
     float: left;
     border: 1px grey solid;
     border-radius: 10px;
     padding: 10px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 .user-list {
@@ -93,12 +125,14 @@ body {
     width: auto;
     height: 35px;
     border: solid 1px #444;
+    border-radius: 5px;
 }
 
 .chat-room-selected {
     width: auto;
     height: 35px;
     border: solid 1px green;
+    border-radius: 5px;
 }
 
 .login-page {
@@ -107,6 +141,59 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     right: 30%;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    -webkit-animation-name: flash;
+    -webkit-animation-duration: .3s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: 3;
+    -moz-animation-name: flash;
+    -moz-animation-duration: .3s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-iteration-count: 3;
+    animation-name: flash;
+    animation-duration: .3s;
+    animation-timing-function: linear;
+    animation-iteration-count: 3;
+}
+
+@-moz-keyframes flash {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes flash {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1.0;
+    }
 }
 
 .login-button {

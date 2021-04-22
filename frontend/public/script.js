@@ -12,6 +12,7 @@ const chatWindow = document.querySelector('.chat-window')
 const userList = document.querySelector('.user-list')
 const channel = document.querySelector('.channels')
 const roomNameClass = document.querySelector('.room')
+const loginForm = document.querySelector('#login-form')
 
 
 var chatRoom = ''
@@ -29,11 +30,31 @@ var previousRoom = ''
 var chatRoomList = ["General", "Math", "Science", "History", "Literature"]
 var runOnce = 1
 var canChat = true
+var usernameInUse = false
 
 var time = new Date();
 let timeString = ''
 
+function usernameError(typeOfError) {
+    const errorMessage = document.createElement('p')
+    errorMessage.classList.add("error-message")
+    loginPage.removeChild(loginPage.lastChild)
+    if (typeOfError == "username too long") {
+        errorMessage.innerHTML = "Please enter a username under 30 charaters"
+    }
+    if (typeOfError == "username in use") {
+        errorMessage.innerHTML = "This username is in use please use a different one"
+    }
+    if (typeOfError == "clear errors") {
+        if (loginPage.lastChild.innerHTML == "This username is in use please use a different one" || loginPage.lastChild.innerHTML == "Please enter a username under 30 charaters")
+            loginPage.removeChild(loginPage.lastChild)
+        console.log("removed error")
+    }
+    loginPage.appendChild(errorMessage)
+}
+
 function renderRoomButtons() {
+    console.log("HI")
     const div = document.createElement('div')
     div.classList.add("channels")
         //const button = document.createElement('button')
@@ -116,6 +137,7 @@ function getUsers() {
 }
 
 function updateUsers(userList) {
+    console.log(users)
     users = userList
 }
 
@@ -153,15 +175,37 @@ function renderConnected(user, roomName, boolean) {
 if (clientIndex) {
     clientIndex.addEventListener('submit', event => {
         event.preventDefault();
-        if (allowLogin != 1) {
-            if (InputUser.value) {
-                localUser = InputUser.value
-                    //InputUser.value = ''
-                allowLogin++
-                renderRoomButtons()
-                canChat = true
+        console.log(JSON.stringify(getUsers()))
+        socket.emit('checkIfUsernameIsTaken', InputUser.value)
+        socket.on('usernameIsTaken', function() {
+            usernameError("username in use")
+            console.log("hi")
+        })
+        socket.on('usernameIsNotTaken', function() {
+            usernameInUse = false
+
+            if (allowLogin != 1) {
+                if (InputUser.value) {
+                    if (InputUser.value.length < 30 && !usernameInUse) {
+                        console.log(InputUser.value.length)
+                        localUser = InputUser.value
+                        allowLogin++
+                        renderRoomButtons()
+                        usernameError("clear errors")
+                        canChat = true
+                    }
+                    if (usernameInUse) {
+                        usernameError("username in use")
+                    }
+                    if (InputUser.value.length > 30) {
+                        console.log("no")
+                        InputUser.value = ''
+                        usernameError("username too long")
+                    }
+                }
             }
-        }
+        })
+        console.log(usernameInUse)
     })
 }
 
@@ -170,11 +214,14 @@ if (client) {
         event.preventDefault();
         if (allowLogin != 1) {
             if (InputUser.value) {
-                localUser = InputUser.value
-                    //socket.emit('updateUsersToIndex')
-                socket.emit('clientIndex', InputUser.value, chatRoom)
-                InputUser.value = ''
-                allowLogin++
+                if (InputUser.value.length < 30) {
+                    console.log(InputUser.value.length)
+                    localUser = InputUser.value
+                    socket.emit('clientIndex', InputUser.value, chatRoom)
+                    InputUser.value = ''
+                    allowLogin++
+                } else
+                    console.log("hi")
             }
         }
     })
@@ -300,7 +347,7 @@ socket.on('updateUsersToScript', (userList, fromFunction) => {
 })
 
 socket.on('runFunctionToGetUsers', (users) => {
-    if (runOnce) {
+    if (runOnce && chat) {
         let array = users[chatRoom]
         let index = array.length - 1
         localUser = users[chatRoom][index]
@@ -308,3 +355,11 @@ socket.on('runFunctionToGetUsers', (users) => {
     }
     updateUsers(users)
 })
+let num = 0
+    // socket.on('usernameIsTaken', (boolean) => {
+    //     usernameInUse = boolean
+    //     console.log(boolean)
+
+//     num++
+//     console.log(num)
+// })
