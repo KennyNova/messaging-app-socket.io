@@ -9,20 +9,17 @@
 <body>
     <div id="container">
         <h1 class="room" value="math">science</h1>
-        <div id="chatSection">
-            <form class="user-form">
-                Username:
-                <input type="text" class="user-input" />
-                <input type="submit" class="user-submit" value="enter" name="username" />
-                <input type="button" class="user-disconnect" value="disconnect">
-            </form>
-        </div>
         <div class="channels">
             <a href='general'><button type="button" class="chat-room" value="general" name="general">General</button></a>
             <a href='math'><button type="button" class="chat-room" value="math" name="math">Math</button></a>
             <button type="button" class="chat-room-selected" value="science" name="science">Science</button>
             <a href='history'><button type="button" class="chat-room" value="history" name="history">History</button></a>
             <a href='literature'><button type="button" class="chat-room" value="literature" name="literature">Literature</button></a>
+        </div>
+        <div class="disconnect">
+            <form class="user-form">
+                <input type="button" class="user-disconnect" value="disconnect">
+            </form>
         </div>
         <div id="chatSection">
             <div class="chat-window"></div>

@@ -8,6 +8,10 @@ body {
     margin: 0 auto;
 }
 
+.room {
+    text-transform: capitalize;
+}
+
 .chat-input {
     width: 300px;
     height: 35px;
@@ -110,6 +114,19 @@ body {
     display: inline-block;
 }
 
+.channels-login {
+    float: left;
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    overflow: auto;
+    text-align: center;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
 .channels {
     float: left;
     border: 1px grey solid;
@@ -140,11 +157,13 @@ body {
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    right: 30%;
     text-align: center;
+    align-content: center;
+    width: 200px;
 }
 
 .error-message {
+    float: left;
     color: red;
     -webkit-animation-name: flash;
     -webkit-animation-duration: .3s;

@@ -1,4 +1,3 @@
-//const { json } = require("express")
 const socket = io()
 const chat = document.querySelector('.chat-form')
 const client = document.querySelector('.user-form')
@@ -48,16 +47,13 @@ function usernameError(typeOfError) {
     if (typeOfError == "clear errors") {
         if (loginPage.lastChild.innerHTML == "This username is in use please use a different one" || loginPage.lastChild.innerHTML == "Please enter a username under 30 charaters")
             loginPage.removeChild(loginPage.lastChild)
-        console.log("removed error")
     }
     loginPage.appendChild(errorMessage)
 }
 
 function renderRoomButtons() {
-    console.log("HI")
     const div = document.createElement('div')
-    div.classList.add("channels")
-        //const button = document.createElement('button')
+    div.classList.add("channels-login")
     chatRoomList.forEach(element => {
         var button = document.createElement('button')
         button.innerHTML = element
@@ -67,6 +63,8 @@ function renderRoomButtons() {
         div.appendChild(button)
     })
     buttons.appendChild(div)
+    loginForm.style.borderBottomLeftRadius = "0px"
+    loginForm.style.borderBottomRightRadius = "0px"
 }
 
 function renderJoinButton(room) {
@@ -79,6 +77,7 @@ function renderJoinButton(room) {
     joinAnchor.setAttribute('href', room)
     joinAnchor.appendChild(joinButton)
     loginPage.appendChild(joinAnchor)
+    loginForm.style.borderRadius = "10px"
 }
 
 function currentTime() {
@@ -107,15 +106,12 @@ function renderMessage(message, user, roomName) {
         timeDiv.innerText = timeString
         chatWindow.appendChild(timeDiv)
 
-        console.log("thisrannnn")
-        console.log(localUser)
         socket.emit('messageToDatabase', message, user, roomName, timeString, localUser)
     }
 }
 
 function renderMessageFromDatabase(messages, roomname) {
     if (roomNameClass.innerHTML == roomname && messages) {
-        console.log(JSON.stringify(messages))
         for (let i = 0; i < messages.length; i++) {
             const div = document.createElement('div')
             div.classList.add('render-message')
@@ -137,7 +133,7 @@ function getUsers() {
 }
 
 function updateUsers(userList) {
-    console.log(users)
+
     users = userList
 }
 
@@ -145,11 +141,8 @@ function renderConnected(user, roomName, boolean) {
     if (roomNameClass.innerHTML && roomNameClass.innerHTML == roomName) {
         chatRoom = roomName
         getUsers()
-        console.log(JSON.stringify(users))
         let array = users[chatRoom]
         let index = array.length - 1
-        console.log(array)
-        console.log(user)
         if (boolean) {
             const div = document.createElement('div')
             div.classList.add('render-message')
@@ -175,11 +168,9 @@ function renderConnected(user, roomName, boolean) {
 if (clientIndex) {
     clientIndex.addEventListener('submit', event => {
         event.preventDefault();
-        console.log(JSON.stringify(getUsers()))
         socket.emit('checkIfUsernameIsTaken', InputUser.value)
         socket.on('usernameIsTaken', function() {
             usernameError("username in use")
-            console.log("hi")
         })
         socket.on('usernameIsNotTaken', function() {
             usernameInUse = false
@@ -187,7 +178,6 @@ if (clientIndex) {
             if (allowLogin != 1) {
                 if (InputUser.value) {
                     if (InputUser.value.length < 30 && !usernameInUse) {
-                        console.log(InputUser.value.length)
                         localUser = InputUser.value
                         allowLogin++
                         renderRoomButtons()
@@ -198,14 +188,12 @@ if (clientIndex) {
                         usernameError("username in use")
                     }
                     if (InputUser.value.length > 30) {
-                        console.log("no")
                         InputUser.value = ''
                         usernameError("username too long")
                     }
                 }
             }
         })
-        console.log(usernameInUse)
     })
 }
 
@@ -215,13 +203,11 @@ if (client) {
         if (allowLogin != 1) {
             if (InputUser.value) {
                 if (InputUser.value.length < 30) {
-                    console.log(InputUser.value.length)
                     localUser = InputUser.value
                     socket.emit('clientIndex', InputUser.value, chatRoom)
                     InputUser.value = ''
                     allowLogin++
-                } else
-                    console.log("hi")
+                }
             }
         }
     })
@@ -261,30 +247,20 @@ if (channel) {
         previousRoom = chatRoom
         chatRoom = event.target.value
         socket.emit('clientIndexFirstLogin', localUser, chatRoom)
-        socket.emit('changeRoom', chatRoom, localUser, previousRoom)
-
-        console.log("yoyo")
     })
 }
 
 window.addEventListener('load', (event) => {
-    console.log("window event listener")
-    console.log(localUser)
     if (chat) {
         chatRoom = roomNameClass.innerHTML.toLowerCase();
         socket.emit('getMessagesFromDB', chatRoom)
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged', localUser, chatRoom)
-        console.log(localUser)
-        console.log(users)
     }
 });
 
 socket.on('clientScript', (client, roomName) => {
-    console.log(client)
-    console.log(users)
     users[roomName].push(client)
-    console.log(users)
     renderConnected(client, roomName, true)
 })
 
@@ -294,29 +270,22 @@ socket.on('allowLogin', function() {
 
 socket.on('userListUpdate', users => {
     socket.emit('updateUsersToIndex', false)
-    let listOfUsers = users
-        //renderConnected(listOfUsers[chatRoom], chatRoom)
 })
 
 
 socket.on('chat', (message, user, roomName) => {
     renderMessage(message, user, roomName)
-    console.log("chatmessage ran")
 })
 
 socket.on('renderMessagesFromDB', (messageArray, roomname) => {
-    console.log(JSON.stringify(messageArray.messages[roomname]))
     renderMessageFromDatabase(messageArray.messages[roomname], roomname)
 })
 
-socket.on('clear', user => {
-    //while (userList.firstChild) {
+socket.on('clear', function() {
     userList.removeChild(userList.firstChild);
     socket.emit('updateUsersToIndex', false)
     socket.emit('roomChanged')
     canChat = false
-
-    // }
 })
 
 socket.on('disconnectMessage', (user, roomName) => {
@@ -330,15 +299,12 @@ socket.on('disconnectMessage', (user, roomName) => {
         timeDiv.classList.add('time')
         timeDiv.innerText = timeString
         chatWindow.appendChild(timeDiv)
-        console.log("disconnect ran")
     }
-    console.log("dis ran out of if")
     renderConnected("user", roomNameClass.innerHTML, false)
 })
 
 socket.on('updateUsersToScript', (userList, fromFunction) => {
     users = userList
-    console.log(JSON.stringify(userList))
     if (fromFunction) {
         renderConnected(users[chatRoom], chatRoom, true)
     } else {
@@ -355,11 +321,3 @@ socket.on('runFunctionToGetUsers', (users) => {
     }
     updateUsers(users)
 })
-let num = 0
-    // socket.on('usernameIsTaken', (boolean) => {
-    //     usernameInUse = boolean
-    //     console.log(boolean)
-
-//     num++
-//     console.log(num)
-// })

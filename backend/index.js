@@ -18,7 +18,6 @@ const pool = new Pool({
 var roomNameVar = 'general'
 var previousRoom = ''
 const users = {
-    lobby: [],
     general: [],
     math: [],
     science: [],
@@ -95,15 +94,12 @@ io.on('connection', socket => {
     socket.on('clientIndexFirstLogin', (client, roomName) => {
         var roomNameVar = roomName.toLowerCase();
         if (!users[roomNameVar].includes(client)) {
-            console.log(users + "91")
             roomNameArray.forEach(element => {
                 if (users[element].includes(client)) {
                     previousRoom = element
                     let index = users[element].indexOf(client)
                     users[element].splice(index, 1)
                     io.emit('updateUsersToScript', users, false)
-                        //socket.emit('disconnectMessage', client, element)
-                    console.log(JSON.stringify(users) + "103")
                 }
             })
             users[roomNameVar].push(client)
@@ -111,29 +107,24 @@ io.on('connection', socket => {
             let index = array.length - 1
             io.emit('clientScript', users[roomNameVar][index], roomName)
 
-            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomNameVar], roomNameVar],
+            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [JSON.stringify(users[roomNameVar]), roomNameVar],
                 (error, results) => {
                     if (error) {
                         throw error
                     }
-                    //response.status(200).send(`User modified with ID: ${id}`)
-
                 }
             )
-            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[previousRoom], previousRoom],
+            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [JSON.stringify(users[previousRoom]), previousRoom],
                 (error, results) => {
                     if (error) {
                         throw error
                     }
-                    //response.status(200).send(`User modified with ID: ${id}`)
-
                 }
             )
             pool.query('SELECT users FROM socketchat', (error, results) => {
                 if (error) {
                     throw error
                 }
-                console.log(JSON.stringify(results.rows) + "109")
             })
 
 
@@ -143,7 +134,6 @@ io.on('connection', socket => {
 
     socket.on('clientIndex', (client, roomName) => {
         if (!users[roomNameVar].includes(client)) {
-            console.log("user", client, "connected to room", roomName + "119")
             users[roomName].push(client)
             io.emit('clientScript', client, roomName)
         } else
@@ -166,16 +156,12 @@ io.on('connection', socket => {
             if (messageData) {
                 messages[roomname].push(messageData)
             }
-            console.log(JSON.stringify(messages))
             pool.query(
                 'UPDATE socketchat SET messages = $1 WHERE roomname = $2', [messages, roomname],
                 (error, results) => {
                     if (error) {
                         throw error
-                    } else
-                        console.log("messages sent")
-                        //response.status(200).send(`User modified with ID: ${id}`)
-                        // response.status(200).send(request.body)
+                    }
                 }
             )
         }
@@ -188,14 +174,11 @@ io.on('connection', socket => {
             if (error) {
                 throw error
             }
-            //response.status(200).json(results.rows)
             socket.emit('renderMessagesFromDB', results.rows[0], roomname)
-            console.log(JSON.stringify(results.rows) + "321321")
         })
     })
 
     socket.on('chatDisconnect', (message, user) => {
-        console.log("disconnected:::", user)
         io.emit('chat', message, user)
     })
 
@@ -204,8 +187,8 @@ io.on('connection', socket => {
         if (users[roomNameVar].includes(user)) {
             users[roomNameVar].splice(users[roomNameVar].indexOf(user), 1);
             io.emit('disconnectMessage', user, roomNameVar)
-            io.emit('clear', user)
-            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomNameVar], roomNameVar],
+            io.emit('clear')
+            pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [JSON.stringify(users[roomNameVar]), roomNameVar],
                 (error, results) => {
                     if (error) {
                         throw error
@@ -214,51 +197,11 @@ io.on('connection', socket => {
         }
     });
 
-    socket.on('changeRoom', (roomName, user, previousRoom) => {
-        console.log(user + " 192")
-        let index = users[previousRoom].indexOf(user)
-        console.log(roomName + previousRoom)
-        users[roomName].push(user)
-        users[previousRoom].splice(index, 1)
-        console.log(users[previousRoom] + "195")
-        console.log(JSON.stringify(users) + "195")
-            //io.emit('disconnectMessage', user, previousRoom)
-
-        console.log(JSON.stringify(messages) + " SSSS195")
-        pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[roomName], roomName],
-            (error, results) => {
-                if (error) {
-                    throw error
-                }
-                //response.status(200).send(`User modified with ID: ${id}`)
-            }
-        )
-        pool.query('UPDATE socketchat SET users = $1 WHERE roomname = $2', [users[previousRoom], previousRoom],
-            (error, results) => {
-                if (error) {
-                    throw error
-                }
-                //response.status(200).send(`User modified with ID: ${id}`)
-            }
-        )
-        pool.query('SELECT messages FROM socketchat WHERE roomname = $1', [previousRoom], (error, results) => {
-            if (error) {
-                throw error
-            }
-            //messages[roomNameVar] = results.rows
-            console.log(JSON.stringify(results.rows) + "211")
-        })
-        console.log(JSON.stringify(messages[previousRoom]) + "hihihi")
-        roomNameVar = roomName
-            //socket.emit('renderMessagesFromDatabase', )
-    })
-
     socket.on('roomChanged', (user, roomName) => {
         socket.emit('userListUpdate', users)
     })
 
     socket.on('updateUsersToIndex', (fromFunction) => {
-        console.log(JSON.stringify(users) + "234")
         socket.emit('updateUsersToScript', users, fromFunction)
     })
 
