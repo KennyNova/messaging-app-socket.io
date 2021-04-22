@@ -266,6 +266,20 @@ io.on('connection', socket => {
         socket.emit('runFunctionToGetUsers', users)
     })
 
+    socket.on('checkIfUsernameIsTaken', (user) => {
+        let usernameIsTaken = false
+        roomNameArray.forEach(element => {
+            if (users[element].includes(user)) {
+                usernameIsTaken = true
+            }
+        })
+        if (usernameIsTaken) {
+            io.emit('usernameIsTaken')
+        } else {
+            io.emit('usernameIsNotTaken')
+        }
+    })
+
 })
 
 server.listen(port, () => {
