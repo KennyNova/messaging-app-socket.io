@@ -1,3 +1,4 @@
+//const { json } = require("express")
 const socket = io()
 const chat = document.querySelector('.chat-form')
 const client = document.querySelector('.user-form')
@@ -24,6 +25,7 @@ var users = {
     history: [],
     literature: []
 }
+var previousRoom = ''
 var chatRoomList = ["General", "Math", "Science", "History", "Literature"]
 var runOnce = 1
 var canChat = true
@@ -84,12 +86,28 @@ function renderMessage(message, user, roomName) {
         timeDiv.innerText = timeString
         chatWindow.appendChild(timeDiv)
 
-        socket.emit('messageToDatabase', message, user, roomName, timeString)
+        console.log("thisrannnn")
+        console.log(localUser)
+        socket.emit('messageToDatabase', message, user, roomName, timeString, localUser)
     }
 }
 
-function renderMessageFromDatabase() {
-    1 + 1
+function renderMessageFromDatabase(messages, roomname) {
+    if (roomNameClass.innerHTML == roomname && messages) {
+        console.log(JSON.stringify(messages))
+        for (let i = 0; i < messages.length; i++) {
+            const div = document.createElement('div')
+            div.classList.add('render-message')
+            div.innerText = messages[i].user + " : " + messages[i].message
+            chatWindow.appendChild(div)
+
+            timeString = messages[0].time
+            const timeDiv = document.createElement('div')
+            timeDiv.classList.add('time')
+            timeDiv.innerText = timeString
+            chatWindow.appendChild(timeDiv)
+        }
+    }
 }
 
 function getUsers() {
@@ -102,11 +120,14 @@ function updateUsers(userList) {
 }
 
 function renderConnected(user, roomName, boolean) {
-    if (roomNameClass.innerHTML == roomName) {
+    if (roomNameClass.innerHTML && roomNameClass.innerHTML == roomName) {
         chatRoom = roomName
         getUsers()
+        console.log(JSON.stringify(users))
         let array = users[chatRoom]
         let index = array.length - 1
+        console.log(array)
+        console.log(user)
         if (boolean) {
             const div = document.createElement('div')
             div.classList.add('render-message')
@@ -190,23 +211,34 @@ if (buttons) {
 
 if (channel) {
     channel.addEventListener('click', event => {
+        previousRoom = chatRoom
         chatRoom = event.target.value
-        socket.emit('changeRoom', chatRoom, localUser)
+        socket.emit('clientIndexFirstLogin', localUser, chatRoom)
+        socket.emit('changeRoom', chatRoom, localUser, previousRoom)
+
+        console.log("yoyo")
     })
 }
 
 window.addEventListener('load', (event) => {
+    console.log("window event listener")
+    console.log(localUser)
     if (chat) {
         chatRoom = roomNameClass.innerHTML.toLowerCase();
-        socket.emit('updateUsersToIndex', true)
-        socket.emit('roomChanged')
         socket.emit('getMessagesFromDB', chatRoom)
+        socket.emit('updateUsersToIndex', true)
+        socket.emit('roomChanged', localUser, chatRoom)
+        console.log(localUser)
+        console.log(users)
     }
 });
 
 socket.on('clientScript', (client, roomName) => {
+    console.log(client)
+    console.log(users)
     users[roomName].push(client)
-        //renderConnected(client, roomName, true)
+    console.log(users)
+    renderConnected(client, roomName, true)
 })
 
 socket.on('allowLogin', function() {
@@ -222,11 +254,12 @@ socket.on('userListUpdate', users => {
 
 socket.on('chat', (message, user, roomName) => {
     renderMessage(message, user, roomName)
+    console.log("chatmessage ran")
 })
 
-socket.on('renderMessagesFromDB', () => {
-
-
+socket.on('renderMessagesFromDB', (messageArray, roomname) => {
+    console.log(JSON.stringify(messageArray.messages[roomname]))
+    renderMessageFromDatabase(messageArray.messages[roomname], roomname)
 })
 
 socket.on('clear', user => {
@@ -250,12 +283,15 @@ socket.on('disconnectMessage', (user, roomName) => {
         timeDiv.classList.add('time')
         timeDiv.innerText = timeString
         chatWindow.appendChild(timeDiv)
+        console.log("disconnect ran")
     }
+    console.log("dis ran out of if")
     renderConnected("user", roomNameClass.innerHTML, false)
 })
 
 socket.on('updateUsersToScript', (userList, fromFunction) => {
     users = userList
+    console.log(JSON.stringify(userList))
     if (fromFunction) {
         renderConnected(users[chatRoom], chatRoom, true)
     } else {
