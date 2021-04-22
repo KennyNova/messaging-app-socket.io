@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat app</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="container">
+        <h1 class="room" value="math">history</h1>
+        <div id="chatSection">
+            <form class="user-form">
+                Username:
+                <input type="text" class="user-input" />
+                <input type="submit" class="user-submit" value="enter" name="username" />
+                <input type="button" class="user-disconnect" value="disconnect">
+            </form>
+        </div>
+        <div class="channels">
+            <a href='general'><button type="button" class="chat-room" value="general" name="general">General</button></a>
+            <a href='math'><button type="button" class="chat-room" value="math" name="math">Math</button></a>
+            <a href='science'><button type="button" class="chat-room" value="science" name="science">Science</button></a>
+            <button type="button" class="chat-room-selected" value="history" name="history">History</button>
+            <a href='literature'><button type="button" class="chat-room" value="literature" name="literature">Literature</button></a>
+        </div>
+        <div id="chatSection">
+            <div class="chat-window"></div>
+            <form class="chat-form">
+                <label class="chat-label">
+            Enter a message:
+            <input type="text" class="chat-input" />
+          </label>
+                <input type="submit" class="chat-submit" value="enter" name="chat" />
+            </form>
+        </div>
+    </div>
+    <div class="userSection">
+        <div class="user-list">
+
+        </div>
+    </div>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

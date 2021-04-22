@@ -1,3 +1,8 @@
+body {
+    background-color: black;
+    color: white;
+}
+
 #container {
     width: 700px;
     margin: 0 auto;
@@ -6,7 +11,8 @@
 .chat-input {
     width: 300px;
     height: 35px;
-    border: solid 1px #444;
+    border: solid 1px #555;
+    background-color: #444;
 }
 
 .chat-submit {
@@ -17,20 +23,29 @@
 
 .user-submit {
     width: 50px;
-    height: 35px;
+    height: 25px;
     border: solid 1px #444;
+    border-radius: 5px;
+}
+
+.user-input {
+    background-color: #444;
 }
 
 .user-disconnect {
     width: auto;
-    height: 35px;
+    height: 25px;
     border: solid 1px #444;
+    border-radius: 5px;
 }
 
 .chat-window {
     height: 300px;
-    width: 400px;
+    width: 490px;
     overflow: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 #chatSection {
@@ -38,6 +53,8 @@
     border: 1px grey solid;
     border-radius: 10px;
     padding: 10px;
+    overflow: auto;
+    overflow-x: hidden;
 }
 
 .userSection {
@@ -69,10 +86,46 @@
     height: auto;
     width: auto;
     overflow: auto;
+    text-align: center;
 }
 
 .chat-room {
     width: auto;
     height: 35px;
     border: solid 1px #444;
+}
+
+.chat-room-selected {
+    width: auto;
+    height: 35px;
+    border: solid 1px green;
+}
+
+.login-page {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    right: 30%;
+}
+
+.login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    text-align: center;
+}
+
+#join {
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    overflow: auto;
+    text-align: center;
+    align-content: center;
 }
