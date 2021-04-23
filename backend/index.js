@@ -181,6 +181,7 @@ io.on('connection', socket => {
 
     socket.on('chatDisconnect', (message, user) => {
         io.emit('chat', message, user)
+        io.emit('updateScroll')
     })
 
     socket.on('end', (user, roomName) => {
@@ -196,6 +197,7 @@ io.on('connection', socket => {
                     }
                 })
         }
+        io.emit('updateScroll')
     });
 
     socket.on('roomChanged', (user, roomName) => {

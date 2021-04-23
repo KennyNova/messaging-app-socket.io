@@ -312,6 +312,7 @@ socket.on('disconnectMessage', (user, roomName) => {
         chatWindow.appendChild(timeDiv)
     }
     renderConnected("user", roomNameClass.innerHTML, false)
+    io.emit('updateScroll')
 })
 
 socket.on('updateUsersToScript', (userList, fromFunction) => {
