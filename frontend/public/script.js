@@ -12,6 +12,7 @@ const userList = document.querySelector('.user-list')
 const channel = document.querySelector('.channels')
 const roomNameClass = document.querySelector('.room')
 const loginForm = document.querySelector('#login-form')
+const chatSection = document.querySelector('#chatSection')
 
 
 var chatRoom = ''
@@ -30,6 +31,7 @@ var chatRoomList = ["General", "Math", "Science", "History", "Literature"]
 var runOnce = 1
 var canChat = true
 var usernameInUse = false
+var scrolled = false
 
 var time = new Date();
 let timeString = ''
@@ -97,6 +99,7 @@ function renderMessage(message, user, roomName) {
     if (roomNameClass.innerHTML == roomName) {
         const div = document.createElement('div')
         div.classList.add('render-message')
+        div.style.wordWrap = "break-word"
         div.innerText = user + " : " + message
         chatWindow.appendChild(div)
 
@@ -115,6 +118,7 @@ function renderMessageFromDatabase(messages, roomname) {
         for (let i = 0; i < messages.length; i++) {
             const div = document.createElement('div')
             div.classList.add('render-message')
+            div.style.wordWrap = "break-word"
             div.innerText = messages[i].user + " : " + messages[i].message
             chatWindow.appendChild(div)
 
@@ -124,6 +128,7 @@ function renderMessageFromDatabase(messages, roomname) {
             timeDiv.innerText = timeString
             chatWindow.appendChild(timeDiv)
         }
+        updateScroll()
     }
 }
 
@@ -138,7 +143,7 @@ function updateUsers(userList) {
 }
 
 function renderConnected(user, roomName, boolean) {
-    if (roomNameClass.innerHTML && roomNameClass.innerHTML == roomName) {
+    if (roomNameClass && roomNameClass.innerHTML == roomName) {
         chatRoom = roomName
         getUsers()
         let array = users[chatRoom]
@@ -154,6 +159,10 @@ function renderConnected(user, roomName, boolean) {
             timeDiv.classList.add('time')
             timeDiv.innerText = timeString
             chatWindow.appendChild(timeDiv)
+            updateScroll()
+        }
+        if (users[chatRoom].length > 19) {
+            chatSection.style.borderBottomRightRadius = "0px"
         }
         userList.innerHTML = ''
         users[chatRoom].forEach(element => {
@@ -162,6 +171,12 @@ function renderConnected(user, roomName, boolean) {
             userListDiv.innerText = element
             userList.appendChild(userListDiv)
         })
+    }
+}
+
+function updateScroll() {
+    if (!scrolled && chat) {
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 }
 
@@ -197,22 +212,6 @@ if (clientIndex) {
     })
 }
 
-if (client) {
-    client.addEventListener('submit', event => {
-        event.preventDefault();
-        if (allowLogin != 1) {
-            if (InputUser.value) {
-                if (InputUser.value.length < 30) {
-                    localUser = InputUser.value
-                    socket.emit('clientIndex', InputUser.value, chatRoom)
-                    InputUser.value = ''
-                    allowLogin++
-                }
-            }
-        }
-    })
-}
-
 if (userDisconnect) {
     userDisconnect.addEventListener('click', event => {
         event.preventDefault();
@@ -230,6 +229,7 @@ if (chat) {
             socket.emit('chat', Input.value, localUser, roomNameClass.innerHTML)
             Input.value = ''
         }
+        updateScroll()
     })
 }
 
@@ -256,8 +256,18 @@ window.addEventListener('load', (event) => {
         socket.emit('getMessagesFromDB', chatRoom)
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged', localUser, chatRoom)
+
     }
+    updateScroll()
 });
+
+if (chat) {
+    chatWindow.addEventListener('scroll', function() {
+        if (chatRoom.scrollHeight > chatRoom.scrollTop) {
+            scrolled = true
+        }
+    })
+}
 
 socket.on('clientScript', (client, roomName) => {
     users[roomName].push(client)
@@ -279,6 +289,7 @@ socket.on('chat', (message, user, roomName) => {
 
 socket.on('renderMessagesFromDB', (messageArray, roomname) => {
     renderMessageFromDatabase(messageArray.messages[roomname], roomname)
+
 })
 
 socket.on('clear', function() {
@@ -320,4 +331,8 @@ socket.on('runFunctionToGetUsers', (users) => {
         runOnce--
     }
     updateUsers(users)
+})
+
+socket.on('updateScroll', function() {
+    updateScroll()
 })

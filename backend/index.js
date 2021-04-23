@@ -143,6 +143,7 @@ io.on('connection', socket => {
     socket.on('chat', (message, user, roomName) => {
         roomNameVar = roomName
         io.emit('chat', message, user, roomNameVar)
+        io.emit('updateScroll')
     })
 
     socket.on('messageToDatabase', (message, user, roomName, time, localUser) => {

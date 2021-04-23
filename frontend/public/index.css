@@ -1,6 +1,17 @@
 body {
     background-color: black;
     color: white;
+    scrollbar-color: green;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    padding: 5px;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 5px;
 }
 
 #container {
@@ -102,6 +113,7 @@ body {
 
 .user-list {
     height: auto;
+    max-height: 339px;
     width: 200px;
     overflow: auto;
 }
@@ -234,4 +246,9 @@ body {
     overflow: auto;
     text-align: center;
     align-content: center;
+}
+
+.render-message {
+    word-wrap: break-word;
+    max-width: 485px;
 }
