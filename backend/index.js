@@ -18,7 +18,7 @@ const pool = new Pool({
 var roomNameVar = 'general'
 var previousRoom = ''
 const users = {
-    general: [],
+    general: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q', 'w', 'e', 'r', 't', 'y', '21'],
     math: [],
     science: [],
     history: [],
