@@ -1,19 +1,21 @@
+// require('dotenv').config()
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
-const port = process.env.PORT || 3000
+const port = process.env.BACKEND_PORT || 3000
 const io = require('socket.io')(server)
 const path = require('path')
 const db = require('./queries')
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'me',
-    host: 'localhost',
-    database: 'chat',
-    password: 'password',
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 })
 
+console.log(process.env.DB_NAME + "18")
 
 var roomNameVar = 'general'
 var previousRoom = ''

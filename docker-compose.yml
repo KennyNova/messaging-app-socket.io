@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+
+    backend:
+        build: .
+        ports:
+          - "8000:8000"
+        depends_on:
+          - database
+        volumes:
+          - .:/app
+        links:
+          - "database:postgres"
+        environment:
+          DB_HOST: database
+        # command: npm start
+
+
+    database:
+        # build: ./database
+        image: postgres:12
+        ports:
+          - "5432:5432"
+        environment:
+          POSTGRES_USER: DB_USER
+          POSTGRES_PASSWORD: DB_PASSWORD

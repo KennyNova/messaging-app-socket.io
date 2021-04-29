@@ -4,14 +4,29 @@ body {
     scrollbar-color: green;
 }
 
+button {
+    background-color: rgb(61, 61, 61);
+    color: white;
+}
+
+input {
+    background-color: rgb(61, 61, 61);
+    color: white;
+}
+
 ::-webkit-scrollbar {
+    height: 5px;
     width: 5px;
     padding: 5px;
 }
 
- ::-webkit-scrollbar-thumb {
-    background: white;
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 1);
     border-radius: 5px;
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0);
 }
 
 #container {
@@ -52,7 +67,7 @@ body {
 .user-disconnect {
     width: auto;
     height: 35px;
-    border: solid 1px #444;
+    border: solid 1px red;
     border-radius: 5px;
 }
 
@@ -61,10 +76,11 @@ body {
     border: 1px grey solid;
     border-radius: 10px;
     padding: 10px;
-    height: 35px;
-    width: auto;
+    height: 37px;
+    width: 79px;
     overflow: auto;
     text-align: center;
+    margin-left: 69px;
 }
 
 .chat-window {
@@ -133,7 +149,6 @@ body {
     padding: 10px;
     height: auto;
     width: auto;
-    overflow: auto;
     text-align: center;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -145,7 +160,7 @@ body {
     border-radius: 10px;
     padding: 10px;
     height: auto;
-    width: auto;
+    width: 320px;
     overflow: auto;
     text-align: center;
 }
@@ -155,6 +170,7 @@ body {
     height: 35px;
     border: solid 1px #444;
     border-radius: 5px;
+    margin: 1px;
 }
 
 .chat-room-selected {
