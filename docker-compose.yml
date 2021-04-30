@@ -14,14 +14,14 @@ services:
           - "database:postgres"
         environment:
           DB_HOST: database
-        # command: npm start
 
 
     database:
-        # build: ./database
         image: postgres:12
         ports:
           - "5432:5432"
+        volumes:
+          - ./scripts/socketchat.sql:/docker-entrypoint-initdb.d/socketchat.sql
         environment:
-          POSTGRES_USER: DB_USER
-          POSTGRES_PASSWORD: DB_PASSWORD
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pass

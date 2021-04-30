@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: socketchat; Type: TABLE; Schema: public; Owner: me
+-- Name: socketchat; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.socketchat (
@@ -31,10 +31,10 @@ CREATE TABLE public.socketchat (
 );
 
 
-ALTER TABLE public.socketchat OWNER TO me;
+ALTER TABLE public.socketchat OWNER TO postgres;
 
 --
--- Data for Name: socketchat; Type: TABLE DATA; Schema: public; Owner: me
+-- Data for Name: socketchat; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.socketchat (roomname, users, messages) FROM stdin;

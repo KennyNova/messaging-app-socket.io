@@ -15,7 +15,7 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 })
 
-console.log(process.env.DB_NAME + "18")
+console.log(process.env.DB_PASSWORD + "18")
 
 var roomNameVar = 'general'
 var previousRoom = ''
