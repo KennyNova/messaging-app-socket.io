@@ -1,19 +1,18 @@
 {
-    "name": "socket.io-messaging-app",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node public/script.js -p 8080",
-        "dev": "node public/script.js"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "express": "^4.17.1",
-        "socket.io": "^4.0.1"
-    },
-    "devDependencies": {},
-    "description": ""
+  "name": "socket.io-messaging-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.1",
+    "socket.io.wait": "^1.0.1"
+  },
+  "devDependencies": {},
+  "description": ""
 }

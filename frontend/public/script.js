@@ -9,10 +9,12 @@ const InputUser = document.querySelector('.user-input')
 const Input = document.querySelector('.chat-input')
 const chatWindow = document.querySelector('.chat-window')
 const userList = document.querySelector('.user-list')
+const userSection = document.querySelector('.userSection')
 const channel = document.querySelector('.channels')
 const roomNameClass = document.querySelector('.room')
 const loginForm = document.querySelector('#login-form')
 const chatSection = document.querySelector('#chatSection')
+const scrollBar = document.querySelector('.-webkit-scrollbar-thumb')
 
 
 var chatRoom = ''
@@ -32,6 +34,7 @@ var runOnce = 1
 var canChat = true
 var usernameInUse = false
 var scrolled = false
+var prevHeight = 0
 
 var time = new Date();
 let timeString = ''
@@ -161,9 +164,7 @@ function renderConnected(user, roomName, boolean) {
             chatWindow.appendChild(timeDiv)
             updateScroll()
         }
-        if (users[chatRoom].length > 19) {
-            chatSection.style.borderBottomRightRadius = "0px"
-        }
+
         userList.innerHTML = ''
         users[chatRoom].forEach(element => {
             let userListDiv = document.createElement('div')
@@ -171,13 +172,25 @@ function renderConnected(user, roomName, boolean) {
             userListDiv.innerText = element
             userList.appendChild(userListDiv)
         })
+        if (userSection.offsetHeight >= 361) {
+            chatSection.style.borderBottomRightRadius = "0px"
+        }
     }
 }
 
 function updateScroll() {
+    console.log(scrolled)
     if (!scrolled && chat) {
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
+}
+
+function hideScrollBar(div) {
+
+    if (div.scrollHeight == prevHeight) {
+        scrollBar.style.background = "black"
+    }
+    prevHeight = div.scrollHeight
 }
 
 if (clientIndex) {
@@ -217,10 +230,13 @@ if (userDisconnect) {
         event.preventDefault();
         allowLogin--
         socket.emit('end', localUser, roomNameClass.innerHTML);
+        localUser = ''
+        location.replace("/")
     })
 }
 
 if (chat) {
+    console.log(localUser)
     chat.addEventListener('submit', event => {
         event.preventDefault();
         let msg = Input.value
@@ -256,7 +272,6 @@ window.addEventListener('load', (event) => {
         socket.emit('getMessagesFromDB', chatRoom)
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged', localUser, chatRoom)
-
     }
     updateScroll()
 });
@@ -266,6 +281,14 @@ if (chat) {
         if (chatRoom.scrollHeight > chatRoom.scrollTop) {
             scrolled = true
         }
+        hideScrollBar(chatWindow)
+    })
+}
+
+if (chat) {
+    userList.addEventListener('scroll', function() {
+        hideScrollBar(userList)
+        console.log(scrollBar)
     })
 }
 
@@ -312,7 +335,6 @@ socket.on('disconnectMessage', (user, roomName) => {
         chatWindow.appendChild(timeDiv)
     }
     renderConnected("user", roomNameClass.innerHTML, false)
-    io.emit('updateScroll')
 })
 
 socket.on('updateUsersToScript', (userList, fromFunction) => {
