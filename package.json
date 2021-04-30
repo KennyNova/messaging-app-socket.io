@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "cd backend/ && node -r dotenv/config index.js",
-        "backend-start": "node -r dotenv/config backend/index.js"
+        "local-start": "cd frontend && npm install && cd ../backend && npm install && npm start"
     },
     "keywords": [],
     "author": "",
