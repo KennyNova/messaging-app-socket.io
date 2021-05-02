@@ -13,8 +13,9 @@ const pool = new Pool({
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
-    ssl: true,
-    sslmode: require,
+    ssl: {
+        rejectUnauthorized: false,
+    }
 })
 
 console.log(process.env.BACKEND_PORT + "18")
