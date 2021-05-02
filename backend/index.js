@@ -16,6 +16,10 @@ const pool = new Pool({
 })
 
 console.log(process.env.BACKEND_PORT + "18")
+console.log(process.env.DB_USER + "19")
+console.log(process.env.DB_HOST + "20")
+console.log(process.env.DB_NAME + "21")
+console.log(process.env.DB_PASSWORD + "22")
 
 var roomNameVar = 'general'
 var previousRoom = ''
