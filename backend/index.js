@@ -13,6 +13,8 @@ const pool = new Pool({
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
+    ssl: true,
+    sslmode: require,
 })
 
 console.log(process.env.BACKEND_PORT + "18")
@@ -24,7 +26,7 @@ console.log(process.env.DB_PASSWORD + "22")
 var roomNameVar = 'general'
 var previousRoom = ''
 const users = {
-    general: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q', 'w', 'e', 'r', 't', 'y', '21'],
+    general: [],
     math: [],
     science: [],
     history: [],
