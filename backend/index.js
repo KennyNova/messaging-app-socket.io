@@ -1,9 +1,10 @@
 if (process.argv[2]) { require('dotenv').config({ path: '.env' }) }
-const db_user = process.env.DB_USER || process.env.USERNAME
-const db_host = process.env.DB_HOST || process.env.HOST
-const db_database = process.env.DB_NAME || process.env.DATABASE
-const db_password = process.env.DB_PASSWORD || process.env.PASSWORD
-const db_port = process.env.DB_PORT || process.env.PORT
+console.log(process.env.USERNAME)
+const db_user = process.env.USERNAME || process.env.DB_USER
+const db_host = process.env.HOST || process.env.DB_HOST
+const db_database = process.env.DATABASE || process.env.DB_NAME
+const db_password = process.env.PASSWORD || process.env.DB_PASSWORD
+const db_port = process.env.PORT || process.env.DB_PORT
 const sslreq = process.env.DB_SSL || true
     // const cert = !(sslreq) || `${chatapp.CA_CERT}`
     // const db_user = process.env.DB_USER
