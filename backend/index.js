@@ -1,6 +1,4 @@
-if (process.argv) {
-    require('dotenv').config({ path: '.env' })
-}
+if (process.argv) { require('dotenv').config({ path: '.env' }) }
 const db_user = process.env.DB_USER || USERNAME
 const db_host = process.env.DB_HOST || HOSTNAME
 const db_database = process.env.DB_NAME || DATABASE
