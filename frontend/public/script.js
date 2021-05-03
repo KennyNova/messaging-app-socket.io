@@ -272,9 +272,6 @@ window.addEventListener('load', (event) => {
         socket.emit('getMessagesFromDB', chatRoom)
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged', localUser, chatRoom)
-        if (!localUser) {
-            location.replace("/")
-        }
     }
     updateScroll()
 });
@@ -355,6 +352,9 @@ socket.on('runFunctionToGetUsers', (users) => {
         let index = array.length - 1
         localUser = users[chatRoom][index]
         runOnce--
+        if (!localUser) {
+            location.replace("/")
+        }
     }
     updateUsers(users)
 })
