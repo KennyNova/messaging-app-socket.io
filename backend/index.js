@@ -27,7 +27,8 @@ if (sslreq) {
     pool.ca = cert
 }
 
-console.log(db_user + "18")
+console.log(db_user + "18!!")
+console.log(USERNAME + DB_USER)
 console.log(db_host + "19")
 console.log(db_database + "20")
 console.log(db_password + "21")
