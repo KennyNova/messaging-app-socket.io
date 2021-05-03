@@ -41,7 +41,7 @@ console.log(db_database + "20")
 console.log(db_password + "21")
 console.log(db_port + "22")
 console.log(sslreq + process.env.DB_SSL + "23")
-console.log(cert + "24")
+    //console.log(cert + "24")
 
 var roomNameVar = 'general'
 var previousRoom = ''
