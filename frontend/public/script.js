@@ -272,6 +272,9 @@ window.addEventListener('load', (event) => {
         socket.emit('getMessagesFromDB', chatRoom)
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged', localUser, chatRoom)
+        if (!localUser) {
+            location.replace("/")
+        }
     }
     updateScroll()
 });
