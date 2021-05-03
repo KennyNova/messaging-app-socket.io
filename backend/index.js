@@ -1,11 +1,11 @@
 if (process.argv[2]) { require('dotenv').config({ path: '.env' }) }
-const db_user = process.env.DB_USER || `${socket-chat.USERNAME}`
-const db_host = process.env.DB_HOST || `${socket-chat.HOST}`
-const db_database = process.env.DB_NAME || `${socket-chat.DATABASE}`
-const db_password = process.env.DB_PASSWORD || `${socket-chat.PASSWORD}`
-const db_port = process.env.DB_PORT || `${socket-chat.PORT}`
+const db_user = process.env.DB_USER || `${chatapp.USERNAME}`
+const db_host = process.env.DB_HOST || `${chatapp.HOST}`
+const db_database = process.env.DB_NAME || `${chatapp.DATABASE}`
+const db_password = process.env.DB_PASSWORD || `${chatapp.PASSWORD}`
+const db_port = process.env.DB_PORT || `${chatapp.PORT}`
 const sslreq = process.env.DB_SSL || true
-const cert = !(sslreq) || `${socket-chat.CA_CERT}`
+const cert = !(sslreq) || `${chatapp.CA_CERT}`
     // const db_user = process.env.DB_USER
     // const db_host = process.env.DB_HOST
     // const db_database = process.env.DB_NAME
@@ -35,7 +35,7 @@ if (sslreq) {
 }
 
 console.log(db_user + "18!!")
-console.log(`${socket-chat.USERNAME}` + DB_USER)
+console.log(`${chatapp.USERNAME}` + DB_USER)
 console.log(db_host + "19")
 console.log(db_database + "20")
 console.log(db_password + "21")
