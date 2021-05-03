@@ -1,9 +1,9 @@
 if (process.argv[2]) { require('dotenv').config({ path: '.env' }) }
-const db_user = process.env.DB_USER || `${chatapp.USERNAME}`
-const db_host = process.env.DB_HOST || `${chatapp.HOST}`
-const db_database = process.env.DB_NAME || `${chatapp.DATABASE}`
-const db_password = process.env.DB_PASSWORD || `${chatapp.PASSWORD}`
-const db_port = process.env.DB_PORT || `${chatapp.PORT}`
+const db_user = process.env.DB_USER || `${kennynova-socketchat.USERNAME}`
+const db_host = process.env.DB_HOST || `${kennynova-socketchat.HOST}`
+const db_database = process.env.DB_NAME || `${kennynova-socketchat.DATABASE}`
+const db_password = process.env.DB_PASSWORD || `${kennynova-socketchat.PASSWORD}`
+const db_port = process.env.DB_PORT || `${kennynova-socketchat.PORT}`
 const sslreq = process.env.DB_SSL || true
     //const cert = !(sslreq) || `${chatapp.CA_CERT}`
     // const db_user = process.env.DB_USER
@@ -35,7 +35,7 @@ if (sslreq) {
 }
 
 console.log(db_user + "18!!")
-console.log(`${chatapp.USERNAME}` + DB_USER)
+console.log(`${kennynova-socketchat.USERNAME}` + DB_USER)
 console.log(db_host + "19")
 console.log(db_database + "20")
 console.log(db_password + "21")
