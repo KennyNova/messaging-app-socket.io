@@ -1,19 +1,18 @@
-// if (process.argv) { require('dotenv').config({ path: '.env' }) }
-require('dotenv').config({ path: '.env' })
-    // const db_user = process.env.DB_USER || USERNAME
-    // const db_host = process.env.DB_HOST || HOSTNAME
-    // const db_database = process.env.DB_NAME || DATABASE
-    // const db_password = process.env.DB_PASSWORD || PASSWORD
-    // const db_port = process.env.DB_PORT || PORT
-    // const sslreq = process.env.DB_SSL || true
-    // const cert = process.env.DB_CERT || CA_CERT
-const db_user = process.env.DB_USER
-const db_host = process.env.DB_HOST
-const db_database = process.env.DB_NAME
-const db_password = process.env.DB_PASSWORD
-const db_port = process.env.DB_PORT
-const sslreq = true
-const cert = process.env.DB_CERT
+if (process.argv) { require('dotenv').config({ path: '.env' }) }
+const db_user = process.env.DB_USER || USERNAME
+const db_host = process.env.DB_HOST || HOSTNAME
+const db_database = process.env.DB_NAME || DATABASE
+const db_password = process.env.DB_PASSWORD || PASSWORD
+const db_port = process.env.DB_PORT || PORT
+const sslreq = process.env.DB_SSL || true
+const cert = process.env.DB_CERT || CA_CERT
+    // const db_user = process.env.DB_USER
+    // const db_host = process.env.DB_HOST
+    // const db_database = process.env.DB_NAME
+    // const db_password = process.env.DB_PASSWORD
+    // const db_port = process.env.DB_PORT
+    // const sslreq = true
+    // const cert = process.env.DB_CERT
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
