@@ -5,8 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "cd backend/ && node index.js",
-        "local-start": "cd frontend && npm install && cd ../backend && npm install && npm start"
+        "start": "cd backend/ && npm start",
+        "local-start": "cd frontend && npm install && cd ../backend && npm install && npm run local-start"
     },
     "keywords": [],
     "author": "",

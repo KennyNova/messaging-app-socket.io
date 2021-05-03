@@ -1,10 +1,22 @@
 const Pool = require('pg').Pool
+    // const pool = new Pool({
+    //     user: process.env.DB_USER,
+    //     host: process.env.DB_HOST,
+    //     database: process.env.DB_NAME,
+    //     password: process.env.DB_PASSWORD,
+    //     port: process.env.DB_PORT,
+    // })
+    // const pool = new Pool({
+    //     host: 'app-053d667a-6d8d-4052-831e-2ac1ffac3396-do-user-9167963-0.b.db.ondigitalocean.com',
+    //     port: 25060,
+    //     username: "db",
+    //     password: "th5hc45c5zkltcy6",
+    //     database: "db",
+    //     sslmode: require,
+    // })
+const pgURL = `postgres://db:th5hc45c5zkltcy6@app-053d667a-6d8d-4052-831e-2ac1ffac3396-do-user-9167963-0.b.db.ondigitalocean.com:25060/db`;
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+    connectionString: pgURL
 })
 
 const getUsers = (request, response) => {

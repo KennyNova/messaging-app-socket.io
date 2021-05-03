@@ -1,4 +1,13 @@
-// require('dotenv').config()
+if (process.argv) {
+    require('dotenv').config({ path: '.env' })
+}
+const db_user = process.env.DB_USER || USERNAME
+const db_host = process.env.DB_HOST || HOSTNAME
+const db_database = process.env.DB_NAME || DATABASE
+const db_password = process.env.DB_PASSWORD || PASSWORD
+const db_port = process.env.DB_PORT || PORT
+const sslreq = process.env.DB_SSL || true
+const cert = process.env.DB_CERT || CA_CERT
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
@@ -8,21 +17,25 @@ const path = require('path')
 const db = require('./queries')
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-    ssl: {
-        rejectUnauthorized: false,
-    }
+    user: db_user,
+    host: db_host,
+    database: db_database,
+    password: db_password,
+    port: db_port,
 })
+if (sslreq) {
+    pool.ssl = true
+    pool.rejectUnauthorized = true
+    pool.ca = cert
+}
 
-console.log(process.env.BACKEND_PORT + "18")
-console.log(process.env.DB_USER + "19")
-console.log(process.env.DB_HOST + "20")
-console.log(process.env.DB_NAME + "21")
-console.log(process.env.DB_PASSWORD + "22")
+console.log(db_user + "18")
+console.log(db_host + "19")
+console.log(db_database + "20")
+console.log(db_password + "21")
+console.log(db_port + "22")
+console.log(sslreq + "23")
+console.log(cert + "24")
 
 var roomNameVar = 'general'
 var previousRoom = ''
