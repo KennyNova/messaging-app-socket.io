@@ -31,7 +31,7 @@ const pool = new Pool({
 if (sslreq) {
     pool.ssl = true
     pool.rejectUnauthorized = true
-    pool.ca = cert
+        //pool.ca = cert
 }
 
 console.log(db_user + "18!!")
