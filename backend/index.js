@@ -1,11 +1,11 @@
 if (process.argv[2]) { require('dotenv').config({ path: '.env' }) }
-const db_user = process.env.DB_USER || `${kennynova-socketchat.USERNAME}`
-const db_host = process.env.DB_HOST || `${kennynova-socketchat.HOST}`
-const db_database = process.env.DB_NAME || `${kennynova-socketchat.DATABASE}`
-const db_password = process.env.DB_PASSWORD || `${kennynova-socketchat.PASSWORD}`
-const db_port = process.env.DB_PORT || `${kennynova-socketchat.PORT}`
+const db_user = process.env.DB_USER || process.env.USERNAME
+const db_host = process.env.DB_HOST || process.env.HOST
+const db_database = process.env.DB_NAME || process.env.DATABASE
+const db_password = process.env.DB_PASSWORD || process.env.PASSWORD
+const db_port = process.env.DB_PORT || process.env.PORT
 const sslreq = process.env.DB_SSL || true
-    //const cert = !(sslreq) || `${chatapp.CA_CERT}`
+    // const cert = !(sslreq) || `${chatapp.CA_CERT}`
     // const db_user = process.env.DB_USER
     // const db_host = process.env.DB_HOST
     // const db_database = process.env.DB_NAME
