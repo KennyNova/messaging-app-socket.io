@@ -1,11 +1,11 @@
 if (process.argv[2]) { require('dotenv').config({ path: '.env' }) }
-const db_user = process.env.DB_USER || `${chatapp.USERNAME}`
-const db_host = process.env.DB_HOST || `${chatapp.HOST}`
-const db_database = process.env.DB_NAME || `${chatapp.DATABASE}`
-const db_password = process.env.DB_PASSWORD || `${chatapp.PASSWORD}`
-const db_port = process.env.DB_PORT || `${chatapp.PORT}`
+const db_user = process.env.DB_USER || `${_self.USERNAME}`
+const db_host = process.env.DB_HOST || `${_self.HOST}`
+const db_database = process.env.DB_NAME || `${_self.DATABASE}`
+const db_password = process.env.DB_PASSWORD || `${_self.PASSWORD}`
+const db_port = process.env.DB_PORT || `${_self.PORT}`
 const sslreq = process.env.DB_SSL || true
-const cert = !(sslreq) || `${chatapp.CA_CERT}`
+    //const cert = !(sslreq) || `${_self.CA_CERT}`
     // const db_user = process.env.DB_USER
     // const db_host = process.env.DB_HOST
     // const db_database = process.env.DB_NAME
@@ -35,7 +35,7 @@ if (sslreq) {
 }
 
 console.log(db_user + "18!!")
-console.log(`${chatapp.USERNAME}` + DB_USER)
+console.log(`${_self.USERNAME}` + DB_USER)
 console.log(db_host + "19")
 console.log(db_database + "20")
 console.log(db_password + "21")
