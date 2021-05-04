@@ -1,24 +1,19 @@
-if (process.argv) { require('dotenv').config({ path: '.env' }) }
+require('dotenv').config({ path: '.env' })
 const db_user = process.env.USERNAME || process.env.DB_USER
 const db_host = process.env.HOST || process.env.DB_HOST
 const db_database = process.env.DATABASE || process.env.DB_NAME
 const db_password = process.env.PASSWORD || process.env.DB_PASSWORD
 const db_port = process.env.PORT || process.env.DB_PORT
-const sslreq = process.env.DB_SSL || true
-const cert = !(sslreq) || process.env.CA_CERT
+const connectionString = process.env.DATABASE_URL || null
 const Pool = require('pg').Pool
 const pool = new Pool({
+    connectionString,
     user: db_user,
     host: db_host,
     database: db_database,
     password: db_password,
     port: db_port,
 })
-if (sslreq) {
-    pool.ssl = true
-    pool.rejectUnauthorized = true
-    pool.ca = cert
-}
 
 
 const getUsers = (request, response) => {

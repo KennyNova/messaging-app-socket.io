@@ -353,7 +353,9 @@ socket.on('runFunctionToGetUsers', (users) => {
         localUser = users[chatRoom][index]
         runOnce--
         if (!localUser) {
+            console.log("HIHIHIHIHIHIH")
             location.replace("/")
+
         }
     }
     updateUsers(users)
