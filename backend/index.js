@@ -4,7 +4,7 @@ const db_host = process.env.HOST || process.env.DB_HOST
 const db_database = process.env.DATABASE || process.env.DB_NAME
 const db_password = process.env.PASSWORD || process.env.DB_PASSWORD
 const db_port = process.env.PORT || process.env.DB_PORT
-const connectionString = process.env.DATABASE_URL || null
+const connectionString = process.env.DB_URL || null
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
@@ -13,8 +13,10 @@ const io = require('socket.io')(server)
 const path = require('path')
 const db = require('./queries')
 const Pool = require('pg').Pool
-const pool = new Pool({
+const pool = connectionString ? new Pool({
     connectionString,
+    ssl: { rejectUnauthorized: false }
+}) : new Pool({
     user: db_user,
     host: db_host,
     database: db_database,

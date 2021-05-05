@@ -4,15 +4,21 @@ const db_host = process.env.HOST || process.env.DB_HOST
 const db_database = process.env.DATABASE || process.env.DB_NAME
 const db_password = process.env.PASSWORD || process.env.DB_PASSWORD
 const db_port = process.env.PORT || process.env.DB_PORT
-const connectionString = process.env.DATABASE_URL || null
+const connectionString = process.env.DB_URL || null
+console.log(connectionString)
 const Pool = require('pg').Pool
 const pool = new Pool({
     connectionString,
-    user: db_user,
-    host: db_host,
-    database: db_database,
-    password: db_password,
-    port: db_port,
+    // user: db_user,
+    // host: db_host,
+    // database: db_database,
+    // password: db_password,
+    // port: db_port,
+    // ssl: true,
+    ssl: {
+        rejectUnauthorized: false,
+        //     ca: fs.readFileSync("../ignore/ca-certificate.cer").toString
+    }
 })
 
 
