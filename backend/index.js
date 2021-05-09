@@ -26,7 +26,7 @@ const pool = connectionString ? new Pool({
     ssl: true,
     ssl: {
         rejectUnauthorized: false,
-        ca: [fs.readFileSync("../ignore/ca-certificate.cer")]
+        ca: process.env.CA_CERT
     }
 }) : new Pool({
     user: db_user,
