@@ -1,9 +1,17 @@
 require('dotenv').config({ path: '.env' })
-const db_user = process.env.USERNAME || process.env.DB_USER
-const db_host = process.env.HOST || process.env.DB_HOST
-const db_database = process.env.DATABASE || process.env.DB_NAME
-const db_password = process.env.PASSWORD || process.env.DB_PASSWORD
-const db_port = process.env.PORT || process.env.DB_PORT
+const fs = require('fs')
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 1;
+// const db_user = process.env.USERNAME || process.env.DB_USER
+// const db_host = process.env.HOST || process.env.DB_HOST
+// const db_database = process.env.DATABASE || process.env.DB_NAME
+// const db_password = process.env.PASSWORD || process.env.DB_PASSWORD
+// const db_port = process.env.PORT || process.env.DB_PORT
+// const connectionString = process.env.DATABASE_URL || null
+const db_user = process.env.DB_USER
+const db_host = process.env.DB_HOST
+const db_database = process.env.DB_NAME
+const db_password = process.env.DB_PASSWORD
+const db_port = process.env.DB_PORT
 const connectionString = process.env.DATABASE_URL || null
 const express = require('express')
 const app = express()
@@ -15,7 +23,11 @@ const db = require('./queries')
 const Pool = require('pg').Pool
 const pool = connectionString ? new Pool({
     connectionString,
-    ssl: { rejectUnauthorized: false }
+    ssl: true,
+    ssl: {
+        rejectUnauthorized: false,
+        ca: [fs.readFileSync("../ignore/ca-certificate.cer")]
+    }
 }) : new Pool({
     user: db_user,
     host: db_host,
@@ -24,8 +36,9 @@ const pool = connectionString ? new Pool({
     port: db_port,
 })
 
+console.log(pool)
 console.log(db_user + "18!!")
-console.log(process.env.USERNAME + db_user)
+console.log(connectionString)
 console.log(db_host + "19")
 console.log(db_database + "20")
 console.log(db_password + "21")
@@ -191,7 +204,9 @@ io.on('connection', socket => {
             if (error) {
                 throw error
             }
-            socket.emit('renderMessagesFromDB', results.rows[0], roomname)
+            if (results) {
+                socket.emit('renderMessagesFromDB', results.rows[0], roomname)
+            }
         })
     })
 
