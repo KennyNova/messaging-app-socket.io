@@ -179,7 +179,6 @@ function renderConnected(user, roomName, boolean) {
 }
 
 function updateScroll() {
-    console.log(scrolled)
     if (!scrolled && chat) {
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
@@ -236,7 +235,6 @@ if (userDisconnect) {
 }
 
 if (chat) {
-    console.log(localUser)
     chat.addEventListener('submit', event => {
         event.preventDefault();
         let msg = Input.value
@@ -288,7 +286,6 @@ if (chat) {
 if (chat) {
     userList.addEventListener('scroll', function() {
         hideScrollBar(userList)
-        console.log(scrollBar)
     })
 }
 
@@ -353,9 +350,7 @@ socket.on('runFunctionToGetUsers', (users) => {
         localUser = users[chatRoom][index]
         runOnce--
         if (!localUser) {
-            console.log("HIHIHIHIHIHIH")
             location.replace("/")
-
         }
     }
     updateUsers(users)

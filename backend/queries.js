@@ -5,11 +5,14 @@ const db_database = process.env.DB_NAME
 const db_password = process.env.DB_PASSWORD
 const db_port = process.env.DB_PORT
 const connectionString = process.env.DATABASE_URL || null
-console.log(connectionString)
 const Pool = require('pg').Pool
 const pool = connectionString ? new Pool({
     connectionString,
-    ssl: { rejectUnauthorized: false }
+    ssl: true,
+    ssl: {
+        rejectUnauthorized: false,
+        ca: process.env.CA_CERT
+    }
 }) : new Pool({
     user: db_user,
     host: db_host,
@@ -104,7 +107,6 @@ const updateMessagesAtRoomName = (request, response) => {
 
 const deleteRoomName = (request, response) => {
     const roomname = request.params.roomname
-    console.log(roomname)
     pool.query('DELETE FROM socketchat WHERE roomname = $1', [roomname], (error, results) => {
         if (error) {
             throw error
