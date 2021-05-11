@@ -274,6 +274,12 @@ window.addEventListener('load', (event) => {
     updateScroll()
 });
 
+window.addEventListener('close', (event) => {
+    allowLogin--
+    socket.emit('end', localUser, roomNameClass.innerHTML);
+    localUser = ''
+});
+
 if (chat) {
     chatWindow.addEventListener('scroll', function() {
         if (chatRoom.scrollHeight > chatRoom.scrollTop) {
