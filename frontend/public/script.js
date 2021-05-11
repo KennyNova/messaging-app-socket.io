@@ -15,6 +15,7 @@ const roomNameClass = document.querySelector('.room')
 const loginForm = document.querySelector('#login-form')
 const chatSection = document.querySelector('#chatSection')
 const scrollBar = document.querySelector('.-webkit-scrollbar-thumb')
+const onlineCounter = document.querySelector('.online-counter')
 
 
 var chatRoom = ''
@@ -192,6 +193,15 @@ function hideScrollBar(div) {
     prevHeight = div.scrollHeight
 }
 
+function renderOnlineCount(num) {
+    const div = document.createElement('div')
+    onlineCounter.innerHTML = ''
+    div.innerHTML = "users online: " + num
+    div.classList.add("count")
+    onlineCounter.appendChild(div)
+    console.log(num)
+}
+
 if (clientIndex) {
     clientIndex.addEventListener('submit', event => {
         event.preventDefault();
@@ -229,6 +239,7 @@ if (userDisconnect) {
         event.preventDefault();
         allowLogin--
         socket.emit('end', localUser, roomNameClass.innerHTML);
+        socket.emit('onlineCount')
         localUser = ''
         location.replace("/")
     })
@@ -270,6 +281,7 @@ window.addEventListener('load', (event) => {
         socket.emit('getMessagesFromDB', chatRoom)
         socket.emit('updateUsersToIndex', true)
         socket.emit('roomChanged', localUser, chatRoom)
+        socket.emit('onlineCount')
     }
     updateScroll()
 });
@@ -364,4 +376,8 @@ socket.on('runFunctionToGetUsers', (users) => {
 
 socket.on('updateScroll', function() {
     updateScroll()
+})
+
+socket.on('runOnlineCounter', (numOnline) => {
+    renderOnlineCount(numOnline)
 })
