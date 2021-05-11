@@ -249,6 +249,26 @@ io.on('connection', socket => {
         }
     })
 
+    socket.on('onlineCount', function() {
+        pool.query('SELECT users FROM socketchat', (error, results) => {
+            if (error) {
+                throw error
+            }
+            if (results) {
+                console.log(JSON.stringify(results.rows) + "258")
+                let count = 0
+                let i = 0
+                results.rows.forEach(element => {
+                    console.log(element.users[`${i}`])
+                    element.users.forEach(user => {
+                        if (user) { count++ }
+                    })
+                });
+                io.emit('runOnlineCounter', count)
+            }
+        })
+    })
+
 })
 
 server.listen(port, () => {

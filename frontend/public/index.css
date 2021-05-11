@@ -71,6 +71,20 @@ input {
     border-radius: 5px;
 }
 
+.online-counter {
+    position: relative;
+    border-radius: 10px;
+    padding: 10px;
+    height: 37px;
+    width: 100px;
+    overflow: auto;
+}
+
+.count {
+    position: absolute;
+    bottom: 0;
+}
+
 .disconnect {
     float: left;
     border: 1px grey solid;
