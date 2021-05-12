@@ -76,13 +76,15 @@ input {
     border-radius: 10px;
     padding: 10px;
     height: 37px;
-    width: 100px;
+    width: 160px;
     overflow: auto;
+    margin-left: 550px;
 }
 
 .count {
     position: absolute;
-    bottom: 0;
+    top: 0;
+    right: 0;
 }
 
 .disconnect {
@@ -142,7 +144,6 @@ input {
 }
 
 .user-list {
-    height: auto;
     max-height: 339px;
     width: 200px;
     overflow: auto;
@@ -282,4 +283,19 @@ input {
 .render-message {
     word-wrap: break-word;
     max-width: 485px;
+}
+
+@media screen and (max-width: 785px) {
+    .userSection {
+        display: none;
+    }
+    .online-counter {
+        display: none;
+    }
+    body {
+        max-width: 500px;
+        margin: auto;
+        padding: 100px;
+        transition: all 1s ease-in-out;
+    }
 }
