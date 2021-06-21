@@ -24,7 +24,7 @@ To initialize the database you must first save [socketchat.sql](https://github.c
 
 ### Starting The App
 
-To start the app run the command ```npm local-start``` in the root directory. This will download all the required dependencies and start the app. Once the app is running simply open your browser and to access [http://localhost:8000](http://localhost:8000) and enter a username. Then select what room you would like to enter and chat away!
+To start the app run the command ```npm run local-start``` in the root directory. This will download all the required dependencies and start the app. Once the app is running simply open your browser and to access [http://localhost:8000](http://localhost:8000) and enter a username. Then select what room you would like to enter and chat away!
 
 
 
