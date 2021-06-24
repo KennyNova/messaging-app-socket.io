@@ -4,7 +4,7 @@ const db_host = process.env.DB_HOST
 const db_database = process.env.DB_NAME
 const db_password = process.env.DB_PASSWORD
 const db_port = process.env.DB_PORT
-const connectionString = process.env.DB_URL || null
+const connectionString =  null
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
@@ -260,9 +260,11 @@ io.on('connection', socket => {
                 let i = 0
                 results.rows.forEach(element => {
                     console.log(element.users[`${i}`])
-                    element.users.forEach(user => {
-                        if (user) { count++ }
-                    })
+                    if (element.users[`${i}`]) {
+                        element.users.forEach(user => {
+                            if (user) { count++ }
+                        })
+                    }
                 });
                 io.emit('runOnlineCounter', count)
             }
